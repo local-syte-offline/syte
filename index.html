@@ -3,75 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline Family Syte</title>
+    <title>Cyber Family Hub</title>
     <style>
         :root {
             --primary: #00f2ff;
-            --glass: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.07);
             --bg: #050505;
+            --accent: #0071e3;
         }
+        
         body {
-            background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; background-image: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
+            background: var(--bg);
+            color: #fff;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
+            margin: 0;
+            overflow-x: hidden;
         }
+
+        /* Кибер-фон */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        .scanner-line {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            opacity: 0.1;
+            animation: scan 6s linear infinite;
+            z-index: 1001;
+            pointer-events: none;
+        }
+
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+        /* Навигация Apple Style */
         nav {
-            display: flex; justify-content: center; gap: 10px; padding: 20px; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; flex-wrap: wrap; border-bottom: 1px solid var(--glass);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
+
         nav button {
-            background: var(--glass); border: 1px solid var(--primary); color: var(--primary); padding: 8px 16px; border-radius: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s;
-        }
-        nav button:hover { background: var(--primary); color: #000; }
-        section {
-            display: none; padding: 40px 20px; max-width: 1200px; margin: 0 auto; animation: slideUp 0.6s ease-out;
-        }
-        section.active { display: block; }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .glass-card {
-            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); margin-bottom: 20px;
-        }
-        /* Приватные заметки */
-        textarea {
-            width: 100%; height: 300px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--primary); color: white; padding: 15px; border-radius: 10px; resize: none; box-sizing: border-box;
-        }
-        .footer {
-            margin-top: 50px;
-            text-align: center;
+            background: transparent;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
             font-size: 14px;
-            color: #777;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav button:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Контент */
+        section {
+            display: none;
+            padding: 60px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: appleShow 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        section.active { display: block; }
+
+        @keyframes appleShow {
+            from { opacity: 0; transform: scale(0.95) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            background: linear-gradient(180deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        /* Кликер и Игры */
+        .game-area {
+            padding: 20px;
+            border: 2px dashed var(--primary);
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--primary);
+            color: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            font-family: monospace;
         }
     </style>
 </head>
 <body>
 
+<div class="grid-bg"></div>
+<div class="scanner-line"></div>
+
 <nav>
     <button onclick="show('home')">Инфо</button>
-    <button onclick="show('files')">Файлы</button>
-    <button onclick="show('games')">Игры</button>
-    <button onclick="show('clicker')">Кликер</button>
-    <button onclick="show('misc')">Карты & Время</button>
+    <button onclick="show('games')">Кликер</button>
     <button onclick="show('notes')">Заметки</button>
+    <button onclick="show('misc')">Система</button>
 </nav>
 
+<!-- Главная -->
 <section id="home" class="active">
     <div class="glass-card">
-        <h1 style="color: var(--primary);">Offline Family Syte</h1>
-        <p>Привет! Я — твой автономный хаб.</p>
-    </div>
-    <div class="footer">
-        Данный сайт доступен в режиме оффлайн, некоторые функции онлайн. Сделано Никитой.
+        <h1>Cyber Hub</h1>
+        <p style="color: var(--primary); font-size: 1.5rem;">Offline Family System v2.0</p>
+        <p>Сделано Никитой. Все данные хранятся локально.</p>
     </div>
 </section>
 
-<!-- ... (Остальные секции Файлы, Игры, Кликер, Разное, Заметки - код тот же) ... -->
-<!-- ВСЕ ПРЕДЫДУЩИЕ СЕКЦИИ ДОЛЖНЫ БЫТЬ ВСТАВЛЕНЫ ЗДЕСЬ -->
-<!-- Убедитесь, что все предыдущие секции вставлены между тегом </section> выше и тегом <script> ниже -->
+<!-- Кликер -->
+<section id="games">
+    <div class="glass-card">
+        <h2>Cyber Clicker</h2>
+        <div class="game-area" onclick="hit()">
+            Счёт: <span id="score">0</span>
+        </div>
+        <p>Кликай по рамке, чтобы добывать байты</p>
+    </div>
+</section>
 
+<!-- Заметки -->
+<section id="notes">
+    <div class="glass-card">
+        <h2>Шифрованные заметки</h2>
+        <textarea id="noteArea" oninput="save()" placeholder="Начни писать..."></textarea>
+    </div>
+</section>
+
+<!-- Система (время и карта) -->
+<section id="misc">
+    <div class="glass-card">
+        <h2 id="clock">00:00:00</h2>
+        <div style="height: 200px; background: repeating-linear-gradient(45deg, #111, #111 10px, #161616 10px, #161616 20px); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--primary);">
+           <span style="color: var(--primary);">[ ОФФЛАЙН КАРТА АКТИВНА ]</span>
+        </div>
+    </div>
+</section>
 
 <script>
-    // --- ОБЯЗАТЕЛЬНО ВСТАВЬТЕ СЮДА ВСЕ ПРЕДЫДУЩИЕ СКРИПТЫ ИГР, ЧАСОВ, ФАЙЛОВ И Т.Д. ---
-    // Например, функции show(), hit(), renderFiles(), initMinesweeper(), updateClocks(), renderCalendar(), saveNotes().
+    // Навигация
+    function show(id) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // Кликер
+    let count = localStorage.getItem('clicks') || 0;
+    document.getElementById('score').innerText = count;
+    function hit() {
+        count++;
+        document.getElementById('score').innerText = count;
+        localStorage.setItem('clicks', count);
+    }
+
+    // Заметки
+    document.getElementById('noteArea').value = localStorage.getItem('cyberNotes') || '';
+    function save() {
+        localStorage.setItem('cyberNotes', document.getElementById('noteArea').value);
+    }
+
+    // Время
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString();
+    }, 1000);
 </script>
 
 </body>
